@@ -4,43 +4,47 @@ import { TaskServices } from "../services/task.services";
 export class TaskControllers{
     async create(req: Request, res: Response): Promise<Response>{
         const taskServices = new TaskServices()
+        const id = res.locals.decode.id
 
-        const newTask = await taskServices.create(req.body)
+        const newTask = await taskServices.create(req.body, id)
 
         return res.status(201).json(newTask)
     }
 
     async findMany(req: Request, res: Response){
         const taskServices = new TaskServices()
+        const id = res.locals.decode.id
         const { category } = req.query
         
-        const allTasks = await taskServices.findMany(category as string)
+        const allTasks = await taskServices.findMany(id, category as string)
 
         return res.status(200).json(allTasks)
     }
 
     async findOne(req: Request, res: Response){
         const taskServices = new TaskServices()
-        const {foundTask} = res.locals
+        const id = res.locals.decode.id
 
-        const task = await taskServices.findOne(foundTask)
+        const task = await taskServices.findOne(id, Number(req.params.id))
 
         return res.status(200).json(task)
     }
 
     async update(req: Request, res: Response){
         const taskServices = new TaskServices()
+        const id = res.locals.decode.id
 
-        const {id} = req.params
-        const task = await taskServices.update(Number(id), req.body);
+        const task = await taskServices.update(id, Number(req.params.id), req.body);
 
         return res.status(200).json(task);
     }
 
     async delete(req: Request, res: Response){
         const taskServices = new TaskServices()
+        const id = res.locals.decode.id
 
-        await taskServices.delete(Number(req.params.id))
+
+        await taskServices.delete(id, Number(req.params.id))
         return res.status(204).json()
     }
 }

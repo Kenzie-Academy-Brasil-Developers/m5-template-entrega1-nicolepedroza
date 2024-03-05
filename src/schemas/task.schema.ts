@@ -6,11 +6,12 @@ export const taskSchema = baseSchema.extend({
     title: z.string(),
     content: z.string(),
     finished: z.boolean().default(false),
+    userId: z.number().nullable(),
     category: categorySchema
 })
 
 
-export const taskCreateSchema = taskSchema.omit({id: true, finished: true, category: true}).extend({categoryId:  z.number().positive().optional()})
+export const taskCreateSchema = taskSchema.omit({id: true, finished: true, category: true, userId: true}).extend({categoryId:  z.number().positive().optional()})
 
 export const taskCreateSchema2 = taskSchema.omit({id: true, category: true}).extend({categoryId:  z.number().positive().nullable()})
 

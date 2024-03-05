@@ -12,6 +12,22 @@ class EnsureMiddleware {
       return next();
     };
 
+    public emailIsUnique = async (
+      req: Request,
+      _: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      const { email } = req.body;
+      if (!email) return next();
+  
+      const foundUser = await prisma.user.findFirst({ where: { email } });
+  
+      if (foundUser) {
+        throw new AppError("E-mail already exists.", 409);
+      }
+  
+      return next();
+    }
 
   public categoryIdExists = async (
     { body: { categoryId } }: Request,
@@ -27,24 +43,6 @@ class EnsureMiddleware {
 
     if (!foundCategory) {
       throw new AppError("Category not found!", 404);
-    }
-
-    return next();
-  };
-
-  public categoryIdExistsInTask = async (
-    { body: { categoryId } }: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    if(!categoryId) return next();
-
-    const foundCategory = await prisma.category.findFirst({
-      where: { id: Number(categoryId) },
-    });
-
-    if (!foundCategory) {
-      throw new AppError("Category not found!", 403);
     }
 
     return next();
