@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc",
+    "build": "npx tsc",
     "migrate:deploy": "npx prisma migrate deploy",
     "dev": "dotenv -e .env.develop -- tsnd --respawn src/server.ts",
     "migrate:dev": "dotenv -e .env.develop -- npx prisma migrate dev",
